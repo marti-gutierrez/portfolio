@@ -1,0 +1,22 @@
+@use '../abstracts' as a;
+
+:root
+{
+    --padding-container: 80px 0;
+    --align-title: center;
+    --box-shadow: 0 0 12px rgba(0,0,0,0.2);
+}
+
+html
+{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 62.5%;
+}
+
+body
+{
+    font-family: a.$font-family;
+    font-size: 1.6rem;
+}
