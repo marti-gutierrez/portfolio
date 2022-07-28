@@ -2,6 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports =
 {
@@ -9,12 +11,18 @@ module.exports =
     output:
     {
         path: path.resolve(__dirname,'dist'),
-        filename: 'main.js',
+        filename: '[name.[contenthash].js',
         assetModuleFilename: "assets/images/[hash][ext][query]"
     },
     resolve:
     {
-        extensions: ['.js']
+        extensions: ['.js'],
+        alias:
+        {
+            '@style': path.resolve(__dirname,'src/style/'),
+            '@images': path.resolve(__dirname,'src/assets/images/'),
+            '@icons': path.resolve(__dirname,'src/assets/icons/'),
+        }
     },
     module:
     {
@@ -37,21 +45,35 @@ module.exports =
                 ]
             },
             {
-                test: /\.(woff|woff2)$/,
-                use:
+                test: /\.(woff|woff2)$/i,
+                type: "asset/resource",
+                generator:
                 {
-                    loader: "url-loader",
-                    options:
-                    {
-                        limit: 10000,
-                        mimetype: "aplication/font-woff",
-                        name: "[name].[ext]",
-                        outputPath: "./assets/fonts",
-                        publicPath: "./assets/fonts",
-                        esModule: false
-                    }
+                    filename: "assets/fonts/[hash][ext][query]"
                 }
+                // use:
+                // {
+                //     loader: "url-loader",
+                //     options:
+                //     {
+                //         limit: 10000,
+                //         mimetype: "aplication/font-woff",
+                //         name: "[name].[ext]",
+                //         outputPath: "./assets/fonts",
+                //         publicPath: "./assets/fonts",
+                //         esModule: false
+                //     }
+                // }
             }
+        ]
+    },
+    optimization:
+    {
+        minimize: true,
+        minimizer:
+        [
+            new CssMinimizerPlugin(),
+            new TerserPlugin()
         ]
     },
     plugins:
@@ -64,7 +86,12 @@ module.exports =
                 filename: './index.html'
             }
         ),
-        new MiniCSSExtractPlugin(),
+        new MiniCSSExtractPlugin
+        (
+            {
+                filename: "assets/[name].[contenthash].css"
+            }
+        ),
         new CopyPlugin
         (
             {

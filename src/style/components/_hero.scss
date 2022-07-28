@@ -1,0 +1,38 @@
+@use '../abstracts/index' as a;
+.hero
+{
+    block-size: 100vh;
+    background-image: a.$bg-gradient;
+    &__main
+    {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap-reverse;
+        block-size: 100%;
+    }
+    &__img
+    {
+        inline-size: 45%;
+        margin: 0;
+        text-align: center;
+    }
+    &__picture
+    {
+        inline-size: 80%;
+    }
+    &__texts
+    {
+        inline-size: 45%;
+        color: a.$color-text;
+    }
+    &__title
+    {
+        font-size: 6.4rem;
+    }
+    &__copy
+    {
+        font-size: 2.4rem;
+        font-weight: 300;
+    }
+}
